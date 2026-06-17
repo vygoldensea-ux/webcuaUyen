@@ -2,10 +2,10 @@
 
 import Autoplay from "embla-carousel-autoplay";
 import useEmblaCarousel from "embla-carousel-react";
-import { ArrowLeft, ArrowRight } from "lucide-react";
+import { ArrowRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
-import { useCallback, useEffect, useMemo, useRef, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { heroSlides, trustHighlights } from "@/data/home";
 
 export function HeroPromoSlider() {
@@ -32,79 +32,100 @@ export function HeroPromoSlider() {
     };
   }, [emblaApi, onSelect]);
 
-  const activeSlide = heroSlides[selectedIndex] ?? heroSlides[0];
-
   return (
-    <section className="section-frame px-4 pt-5 pb-3 lg:px-6 lg:pt-6">
-      {/* Main hero card */}
-      <div className="relative overflow-hidden rounded-[28px] sm:rounded-[36px]">
+    <section className="bg-[#faf6f3] py-8 lg:py-14">
+      <div className="section-frame px-4 lg:px-6">
         <div className="overflow-hidden" ref={emblaRef}>
           <div className="flex">
             {heroSlides.map((slide, index) => (
               <article
                 key={slide.id}
-                className="relative min-w-0 flex-[0_0_100%]"
+                className="min-w-0 flex-[0_0_100%]"
                 aria-roledescription="slide"
                 aria-label={`Slide ${index + 1} trên ${heroSlides.length}`}
               >
-                {/* Full-bleed image */}
-                <div className="relative min-h-[520px] sm:min-h-[600px] lg:min-h-[720px]">
-                  <Image
-                    src={slide.image}
-                    alt={slide.alt}
-                    fill
-                    priority={index === 0}
-                    sizes="100vw"
-                    className="object-cover object-center"
-                  />
-                  {/* Gradient overlay — warm dark from left-bottom */}
-                  <div className="absolute inset-0 bg-[linear-gradient(135deg,rgba(18,10,8,0.78)_0%,rgba(18,10,8,0.38)_55%,rgba(18,10,8,0.08)_100%)]" />
-                  <div className="absolute inset-0 bg-[linear-gradient(to_top,rgba(18,10,8,0.65)_0%,transparent_50%)]" />
+                <div className="grid items-center gap-8 lg:grid-cols-[1fr_0.9fr] lg:gap-14">
+                  {/* Left — text content */}
+                  <div
+                    className="flex flex-col"
+                    style={{
+                      opacity: selectedIndex === index ? 1 : 0,
+                      transform: `translateY(${selectedIndex === index ? 0 : 16}px)`,
+                      transition: "opacity 0.6s ease, transform 0.6s ease",
+                    }}
+                  >
+                    <p className="eyebrow">Pure Beauty Care · Vũng Tàu</p>
 
-                  {/* Content overlaid at bottom-left */}
-                  <div className="absolute inset-0 flex flex-col justify-end p-6 sm:p-10 lg:p-14">
-                    <div
-                      className="max-w-2xl transition-all duration-700 ease-out"
-                      style={{
-                        opacity: selectedIndex === index ? 1 : 0,
-                        transform: `translateY(${selectedIndex === index ? 0 : 20}px)`,
-                      }}
-                    >
-                      {slide.badge ? (
-                        <span className="mb-4 inline-flex rounded-full border border-white/25 bg-white/12 px-4 py-1.5 text-[11px] font-semibold tracking-[0.2em] text-white/85 uppercase backdrop-blur-sm">
-                          {slide.badge}
-                        </span>
-                      ) : null}
+                    <h1 className="editorial-title mt-4 text-[2.6rem] leading-[1.05] text-[color:var(--foreground)] sm:text-[3.4rem] lg:text-[4.4rem]">
+                      {slide.title}
+                    </h1>
 
-                      <h1 className="hero-headline text-[2.8rem] font-black leading-[0.95] text-white sm:text-[4.2rem] lg:text-[6rem]">
-                        {slide.title}
-                      </h1>
+                    <p className="mt-5 max-w-md text-[15px] leading-7 text-[color:var(--muted)] sm:text-base sm:leading-8">
+                      {slide.subtitle}
+                    </p>
 
-                      <p className="mt-4 max-w-md text-[15px] leading-7 text-white/75 sm:mt-5 sm:text-base">
-                        {slide.subtitle}
-                      </p>
-
-                      <div className="mt-6 flex flex-wrap gap-3 sm:mt-8">
+                    <div className="mt-7 flex flex-wrap items-center gap-3 sm:mt-9">
+                      <Link
+                        href="#final-cta"
+                        className="inline-flex h-12 items-center gap-2 rounded-full bg-[color:var(--cta)] px-7 text-sm font-bold text-white hover:bg-[color:var(--cta-hover)]"
+                      >
+                        {slide.primaryCta}
+                        <ArrowRight className="h-4 w-4" />
+                      </Link>
+                      {slide.secondaryCta ? (
                         <Link
-                          href="#final-cta"
-                          className="inline-flex h-12 items-center gap-2 rounded-full bg-[color:var(--cta)] px-7 text-sm font-bold text-white hover:bg-[color:var(--cta-hover)]"
+                          href="#dich-vu"
+                          className="inline-flex h-12 items-center gap-2 rounded-full border border-[color:var(--border-soft)] bg-white px-7 text-sm font-semibold text-[color:var(--foreground)] hover:border-[color:var(--earth)]"
                         >
-                          {slide.primaryCta}
+                          {slide.secondaryCta}
                         </Link>
-                        {slide.secondaryCta ? (
-                          <Link
-                            href="#dich-vu"
-                            className="inline-flex h-12 items-center gap-2 rounded-full border border-white/30 bg-white/10 px-7 text-sm font-semibold text-white backdrop-blur-sm hover:bg-white/20"
-                          >
-                            {slide.secondaryCta}
-                          </Link>
-                        ) : null}
-                      </div>
+                      ) : null}
                     </div>
 
-                    {/* Bottom-right: accent pill */}
-                    <div className="absolute right-6 bottom-6 sm:right-10 sm:bottom-8 hidden sm:block">
-                      <div className="rounded-full border border-white/20 bg-white/10 px-4 py-2 text-xs text-white/70 backdrop-blur-md">
+                    {/* Trust checkmarks */}
+                    <div className="mt-8 flex flex-col gap-2.5">
+                      {["Tư vấn theo từng gương mặt thật", "Không ép dịch vụ — làm đủ là dừng", "Theo dõi sau liệu trình"].map((item) => (
+                        <div key={item} className="flex items-center gap-2.5 text-sm text-[color:var(--muted)]">
+                          <svg className="h-4 w-4 shrink-0 text-[color:var(--earth)]" viewBox="0 0 16 16" fill="none">
+                            <path d="M3 8l3.5 3.5L13 4.5" stroke="currentColor" strokeWidth="1.8" strokeLinecap="round" strokeLinejoin="round" />
+                          </svg>
+                          {item}
+                        </div>
+                      ))}
+                    </div>
+                  </div>
+
+                  {/* Right — photo */}
+                  <div className="relative">
+                    <div
+                      className="relative overflow-hidden rounded-[28px] sm:rounded-[36px]"
+                      style={{
+                        opacity: selectedIndex === index ? 1 : 0.5,
+                        transform: `scale(${selectedIndex === index ? 1 : 0.97})`,
+                        transition: "opacity 0.7s ease, transform 0.7s ease",
+                      }}
+                    >
+                      <div className="aspect-[4/5] sm:aspect-[3/4] lg:aspect-[4/5]">
+                        <Image
+                          src={slide.image}
+                          alt={slide.alt}
+                          fill
+                          priority={index === 0}
+                          sizes="(max-width: 1024px) 100vw, 46vw"
+                          className="object-cover object-top"
+                        />
+                      </div>
+
+                      {/* Floating badge — top right */}
+                      <div className="absolute right-4 top-4 max-w-[180px] rounded-2xl border border-white/60 bg-white/90 px-4 py-3.5 shadow-lg backdrop-blur-md sm:right-5 sm:top-5">
+                        <p className="text-[11px] font-bold uppercase tracking-[0.14em] text-[color:var(--earth)]">Premium Care</p>
+                        <p className="mt-1 text-[12px] leading-5 text-[color:var(--muted)]">
+                          Tư vấn kỹ trước, theo dõi sau mỗi liệu trình
+                        </p>
+                      </div>
+
+                      {/* Floating accent chip — bottom */}
+                      <div className="absolute bottom-4 left-4 rounded-full border border-white/50 bg-white/85 px-4 py-2 text-xs font-semibold text-[color:var(--foreground)] backdrop-blur-sm sm:bottom-5 sm:left-5">
                         {slide.accent}
                       </div>
                     </div>
@@ -115,55 +136,35 @@ export function HeroPromoSlider() {
           </div>
         </div>
 
-        {/* Slide controls */}
-        <div className="absolute right-5 top-1/2 z-20 hidden -translate-y-1/2 flex-col gap-2 lg:flex">
-          <button
-            type="button"
-            onClick={() => emblaApi?.scrollPrev()}
-            className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/25 bg-white/12 text-white backdrop-blur-sm hover:bg-white/22"
-            aria-label="Slide trước"
-          >
-            <ArrowLeft className="h-4 w-4" />
-          </button>
-          <button
-            type="button"
-            onClick={() => emblaApi?.scrollNext()}
-            className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-white/25 bg-white/12 text-white backdrop-blur-sm hover:bg-white/22"
-            aria-label="Slide tiếp theo"
-          >
-            <ArrowRight className="h-4 w-4" />
-          </button>
-        </div>
-
-        {/* Dot indicators */}
-        <div className="absolute inset-x-0 bottom-5 z-20 flex justify-center lg:bottom-7">
-          <div className="inline-flex items-center gap-2">
+        {/* Dots + trust strip */}
+        <div className="mt-8 flex flex-col gap-5 sm:flex-row sm:items-center sm:justify-between">
+          {/* Dot indicators */}
+          <div className="flex items-center gap-2">
             {heroSlides.map((slide, index) => (
               <button
                 key={slide.id}
                 type="button"
                 onClick={() => emblaApi?.scrollTo(index)}
-                className={`h-1.5 rounded-full transition-all duration-300 ${
-                  selectedIndex === index ? "w-8 bg-white" : "w-1.5 bg-white/40"
+                className={`h-2 rounded-full transition-all duration-300 ${
+                  selectedIndex === index
+                    ? "w-8 bg-[color:var(--cta)]"
+                    : "w-2 bg-[color:var(--border-medium)]"
                 }`}
                 aria-label={`Đi đến slide ${index + 1}`}
               />
             ))}
           </div>
-        </div>
-      </div>
 
-      {/* Trust strip below hero */}
-      <div className="mt-3 grid grid-cols-1 gap-2 sm:grid-cols-3">
-        {trustHighlights.map((item) => (
-          <div
-            key={item}
-            className="flex items-center gap-3 rounded-2xl border border-[color:var(--border-soft)] bg-white px-4 py-3 text-[13px] font-semibold text-[color:var(--foreground)]"
-          >
-            <span className="h-1.5 w-1.5 shrink-0 rounded-full bg-[color:var(--cta)]" />
-            {item}
+          {/* Trust highlights */}
+          <div className="flex flex-wrap gap-x-5 gap-y-2">
+            {trustHighlights.map((item) => (
+              <span key={item} className="flex items-center gap-1.5 text-[13px] text-[color:var(--muted)]">
+                <span className="h-1 w-1 rounded-full bg-[color:var(--earth)] shrink-0" />
+                {item}
+              </span>
+            ))}
           </div>
-        ))}
+        </div>
       </div>
     </section>
   );
