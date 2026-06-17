@@ -10,7 +10,7 @@ import { heroSlides, trustHighlights } from "@/data/home";
 
 export function HeroPromoSlider() {
   const autoplay = useMemo(
-    () => Autoplay({ delay: 5500, stopOnInteraction: false, stopOnMouseEnter: true }),
+    () => Autoplay({ delay: 3000, stopOnInteraction: false, stopOnMouseEnter: false }),
     [],
   );
 
