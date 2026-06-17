@@ -4,50 +4,55 @@ import { ArrowUpRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef } from "react";
-import { Reveal } from "./reveal";
 
 const homeServices = [
   {
     slug: "phun-xam-chan-may-vung-tau",
     title: "Phun xăm chân mày",
-    description: "Thiết kế dáng mày mềm, tự nhiên, cân với gương mặt — tư vấn dáng và màu trước khi làm.",
+    sub: "Dáng mày tự nhiên, vẽ theo gương mặt",
     image: "/images/service-phun-may.jpg",
-    alt: "Dịch vụ phun xăm chân mày tại Vũng Tàu",
+    alt: "Phun xăm chân mày Vũng Tàu",
+    count: "Phun xăm",
   },
   {
     slug: "phun-moi-vung-tau",
     title: "Phun môi",
-    description: "Xử lý nền môi nhợt hoặc thâm nhẹ, làm tươi sắc môi theo hướng thật và mềm mại.",
+    sub: "Tươi sắc môi, xử lý nền thâm nhẹ",
     image: "/images/service-phun-moi.jpg",
-    alt: "Dịch vụ phun môi tại Vũng Tàu",
+    alt: "Phun môi Vũng Tàu",
+    count: "Phun xăm",
   },
   {
     slug: "filler-moi-vung-tau",
     title: "Filler",
-    description: "Tạo điểm nhấn vừa đủ cho môi, cằm hoặc vùng cần cân chỉnh — ưu tiên sự hài hòa.",
+    sub: "Điểm nhấn vừa đủ, hài hòa gương mặt",
     image: "/images/service-filler.jpg",
-    alt: "Dịch vụ filler tại Vũng Tàu",
+    alt: "Filler Vũng Tàu",
+    count: "Thẩm mỹ",
   },
   {
     slug: "botox-gon-ham-vung-tau",
     title: "Botox / Gọn hàm",
-    description: "Hỗ trợ gương mặt thon gọn, xóa nhăn theo hướng tự nhiên — tư vấn liều phù hợp trước.",
+    sub: "Thon gọn, xóa nhăn theo hướng tự nhiên",
     image: "/images/service-botox.jpg",
-    alt: "Dịch vụ botox gọn hàm tại Vũng Tàu",
+    alt: "Botox gọn hàm Vũng Tàu",
+    count: "Thẩm mỹ",
   },
   {
     slug: "meso-cang-bong-cap-am-vung-tau",
     title: "Meso căng bóng",
-    description: "Cấp ẩm sâu, phục hồi độ mịn và căng bóng nhẹ cho da thiếu ẩm, xỉn màu.",
+    sub: "Cấp ẩm sâu, phục hồi độ mịn căng",
     image: "/images/service-meso.jpg",
-    alt: "Dịch vụ meso căng bóng tại Vũng Tàu",
+    alt: "Meso căng bóng Vũng Tàu",
+    count: "Chăm sóc da",
   },
   {
     slug: "cham-soc-da-mun-vung-tau",
     title: "Chăm sóc da mụn",
-    description: "Lấy nhân mụn, làm sạch và phục hồi da theo từng tình trạng — theo dõi qua từng buổi.",
+    sub: "Lấy nhân, làm sạch, phục hồi từng tình trạng",
     image: "/images/service-da-mun.jpg",
-    alt: "Dịch vụ chăm sóc da mụn tại Vũng Tàu",
+    alt: "Chăm sóc da mụn Vũng Tàu",
+    count: "Chăm sóc da",
   },
 ] as const;
 
@@ -64,9 +69,8 @@ function ServiceCard({
     const el = ref.current;
     if (!el) return;
     el.style.opacity = "0";
-    el.style.transform = "translateY(28px)";
-    el.style.transition = `opacity 0.5s ease ${index * 0.08}s, transform 0.5s ease ${index * 0.08}s`;
-
+    el.style.transform = "translateY(24px)";
+    el.style.transition = `opacity 0.48s ease ${index * 0.07}s, transform 0.48s ease ${index * 0.07}s`;
     const io = new IntersectionObserver(
       ([entry]) => {
         if (entry.isIntersecting) {
@@ -75,73 +79,90 @@ function ServiceCard({
           io.disconnect();
         }
       },
-      { threshold: 0.06, rootMargin: "0px 0px -20px 0px" },
+      { threshold: 0.05, rootMargin: "0px 0px -16px 0px" },
     );
     io.observe(el);
     return () => io.disconnect();
   }, [index]);
 
   return (
-    <article
-      ref={ref}
-      className="group flex h-full flex-col overflow-hidden rounded-[24px] border border-[color:var(--border-soft)] bg-white shadow-sm hover:shadow-md transition-shadow duration-300"
-    >
-      <div className="relative aspect-[4/3] overflow-hidden bg-[color:var(--surface-soft)]">
-        <Image
-          src={service.image}
-          alt={service.alt}
-          fill
-          sizes="(max-width: 768px) 100vw, (max-width: 1280px) 50vw, 33vw"
-          className="object-cover transition-transform duration-500 ease-out group-hover:scale-[1.05]"
-        />
-      </div>
-      <div className="flex flex-1 flex-col p-5">
-        <h3 className="text-[17px] font-bold text-[color:var(--foreground)] leading-snug">
-          {service.title}
-        </h3>
-        <p className="mt-2 flex-1 text-sm leading-6 text-[color:var(--muted)]">
-          {service.description}
-        </p>
-        <Link
-          href={`/dich-vu/${service.slug}`}
-          className="group/link mt-4 inline-flex items-center gap-1.5 text-sm font-semibold text-[color:var(--earth)]"
-        >
-          Xem chi tiết
-          <ArrowUpRight className="h-3.5 w-3.5 transition-transform duration-200 group-hover/link:translate-x-0.5 group-hover/link:-translate-y-0.5" />
-        </Link>
-      </div>
+    <article ref={ref} className="group">
+      <Link href={`/dich-vu/${service.slug}`} className="block">
+        {/* Image — tall portrait crop */}
+        <div className="relative aspect-[3/4] overflow-hidden rounded-[20px] bg-[color:var(--surface-soft)]">
+          <Image
+            src={service.image}
+            alt={service.alt}
+            fill
+            sizes="(max-width: 640px) 50vw, (max-width: 1024px) 33vw, 20vw"
+            className="object-cover object-center transition-transform duration-500 ease-out group-hover:scale-[1.06]"
+          />
+          {/* Subtle overlay on hover */}
+          <div className="absolute inset-0 bg-[color:var(--foreground)] opacity-0 transition-opacity duration-300 group-hover:opacity-10 rounded-[20px]" />
+          {/* Category badge */}
+          <span className="absolute left-3 top-3 rounded-full bg-white/85 px-3 py-1 text-[11px] font-semibold text-[color:var(--earth)] backdrop-blur-sm">
+            {service.count}
+          </span>
+        </div>
+        {/* Info below image */}
+        <div className="mt-3 px-1">
+          <h3 className="text-[15px] font-bold text-[color:var(--foreground)] leading-snug group-hover:text-[color:var(--earth)] transition-colors">
+            {service.title}
+          </h3>
+          <p className="mt-1 text-[13px] leading-5 text-[color:var(--muted)]">{service.sub}</p>
+        </div>
+      </Link>
     </article>
   );
 }
 
 export function ServiceGrid() {
   return (
-    <section id="dich-vu" className="section-white py-16 lg:py-24">
+    <section id="dich-vu" className="bg-white py-16 lg:py-24">
       <div className="section-frame px-4 lg:px-6">
-        <Reveal className="mb-10 max-w-2xl">
-          <p className="eyebrow">Dịch vụ làm đẹp tại Vũng Tàu</p>
-          <h2 className="editorial-title mt-3 text-3xl sm:text-4xl lg:text-5xl">
-            Phun xăm, filler, botox &amp; chăm sóc da tại Vũng Tàu
-          </h2>
-          <p className="mt-4 text-base leading-7 text-[color:var(--muted)]">
-            Không làm theo trend — chỉ làm theo điều gương mặt, làn da và môi mày bạn thực sự cần.
-          </p>
-        </Reveal>
+        {/* Header row */}
+        <div className="mb-10 flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
+          <div className="max-w-xl">
+            <p className="eyebrow">Dịch vụ tại Vũng Tàu</p>
+            <h2 className="editorial-title mt-3 text-3xl sm:text-4xl">
+              Dịch vụ làm đẹp<br className="hidden sm:block" /> tại Chòi của Uyn
+            </h2>
+          </div>
+          <Link
+            href="/dich-vu"
+            className="inline-flex h-10 shrink-0 items-center gap-1.5 rounded-full border border-[color:var(--border-soft)] bg-white px-5 text-sm font-semibold text-[color:var(--foreground)] hover:border-[color:var(--earth)]"
+          >
+            Xem tất cả
+            <ArrowUpRight className="h-3.5 w-3.5" />
+          </Link>
+        </div>
 
-        <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-3">
+        {/* Category grid — 2 cols mobile, 3 tablet, 6 desktop */}
+        <div className="grid grid-cols-2 gap-4 sm:grid-cols-3 lg:grid-cols-6 lg:gap-5">
           {homeServices.map((service, index) => (
             <ServiceCard key={service.slug} service={service} index={index} />
           ))}
         </div>
 
-        <div className="mt-8 text-center">
-          <Link
-            href="/dich-vu"
-            className="inline-flex h-10 items-center gap-2 rounded-full border border-[color:var(--border-soft)] bg-white px-5 text-sm font-semibold text-[color:var(--foreground)] hover:border-[color:var(--earth)]"
-          >
-            Xem tất cả dịch vụ
-            <ArrowUpRight className="h-3.5 w-3.5" />
-          </Link>
+        {/* Banner strip below grid */}
+        <div className="mt-10 overflow-hidden rounded-[24px] bg-[color:var(--surface-rose)] px-6 py-6 sm:px-8 sm:py-7 lg:px-10">
+          <div className="flex flex-col gap-4 sm:flex-row sm:items-center sm:justify-between">
+            <div>
+              <p className="text-xs font-bold uppercase tracking-[0.16em] text-[color:var(--earth)]">
+                Tư vấn trước · Không ép dịch vụ
+              </p>
+              <p className="mt-1 text-xl font-bold text-[color:var(--foreground)] sm:text-2xl">
+                Làm đẹp vừa đủ — đúng điều da cần
+              </p>
+            </div>
+            <Link
+              href="/lien-he"
+              className="inline-flex h-11 shrink-0 items-center gap-2 rounded-full bg-[color:var(--cta)] px-6 text-sm font-bold text-white hover:bg-[color:var(--cta-hover)]"
+            >
+              Đặt lịch ngay
+              <ArrowUpRight className="h-3.5 w-3.5" />
+            </Link>
+          </div>
         </div>
       </div>
     </section>
