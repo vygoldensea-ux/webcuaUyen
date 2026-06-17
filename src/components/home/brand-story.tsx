@@ -31,7 +31,7 @@ export function BrandStory() {
         <div className="lg:pl-6">
           <Reveal>
             <p className="eyebrow">Vì sao khách chọn Uyn</p>
-            <h2 className="editorial-title mt-3 text-3xl leading-tight sm:text-4xl lg:text-5xl">
+            <h2 className="editorial-title mt-3 text-3xl leading-tight text-[color:var(--foreground)] sm:text-4xl lg:text-5xl">
               Làm đẹp không cần quá tay. Chỉ cần đúng chỗ, đúng dáng, đúng người.
             </h2>
             <p className="mt-5 text-base leading-7 text-[color:var(--muted)]">

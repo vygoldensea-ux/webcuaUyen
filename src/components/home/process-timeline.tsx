@@ -7,7 +7,7 @@ export function ProcessTimeline() {
       <div className="section-frame px-4 lg:px-6">
         <Reveal className="mb-10 max-w-xl">
           <p className="eyebrow">Quy trình</p>
-          <h2 className="editorial-title mt-3 text-3xl sm:text-4xl">
+          <h2 className="editorial-title mt-3 text-3xl text-[color:var(--foreground)] sm:text-4xl">
             Làm sao một buổi tại Chòi của Uyn diễn ra?
           </h2>
         </Reveal>

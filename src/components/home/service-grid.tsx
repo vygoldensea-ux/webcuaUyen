@@ -124,7 +124,7 @@ export function ServiceGrid() {
         <div className="mb-10 flex flex-col gap-5 sm:flex-row sm:items-end sm:justify-between">
           <div className="max-w-xl">
             <p className="eyebrow">Dịch vụ tại Vũng Tàu</p>
-            <h2 className="editorial-title mt-3 text-3xl sm:text-4xl">
+            <h2 className="editorial-title mt-3 text-3xl text-[color:var(--foreground)] sm:text-4xl">
               Dịch vụ làm đẹp<br className="hidden sm:block" /> tại Chòi của Uyn
             </h2>
           </div>

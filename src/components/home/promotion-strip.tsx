@@ -14,7 +14,7 @@ export function PromotionStrip() {
             <div className="flex flex-col gap-5 lg:flex-row lg:items-end lg:justify-between">
               <Reveal className="max-w-xl">
                 <p className="eyebrow">Ưu đãi hiện tại</p>
-                <h2 className="editorial-title mt-3 text-3xl">
+                <h2 className="editorial-title mt-3 text-3xl text-[color:var(--foreground)]">
                   Ưu đãi dành cho khách đặt lịch trước
                 </h2>
               </Reveal>

@@ -15,7 +15,7 @@ export function BlogPreview() {
         <div className="mb-10 flex items-end justify-between">
           <Reveal>
             <p className="eyebrow">Kiến thức làm đẹp</p>
-            <h2 className="editorial-title mt-3 text-3xl sm:text-4xl">Bài viết mới nhất</h2>
+            <h2 className="editorial-title mt-3 text-3xl text-[color:var(--foreground)] sm:text-4xl">Bài viết mới nhất</h2>
           </Reveal>
           <Link
             href="/blog"
