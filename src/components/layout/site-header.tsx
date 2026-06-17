@@ -1,22 +1,46 @@
 "use client";
 
-import { AnimatePresence, motion } from "framer-motion";
+import { useGSAP } from "@gsap/react";
+import gsap from "gsap";
+import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ChevronDown, Menu, PhoneCall, Search, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { navItems, servicesGroupedForMenu } from "@/lib/site-data";
 
+gsap.registerPlugin(ScrollTrigger);
+
 export function SiteHeader() {
   const [isScrolled, setIsScrolled] = useState(false);
   const [isOpen, setIsOpen] = useState(false);
   const [isServicesOpen, setIsServicesOpen] = useState(false);
   const servicesPanelRef = useRef<HTMLDivElement | null>(null);
+  const headerRef = useRef<HTMLElement>(null);
+  const drawerRef = useRef<HTMLDivElement>(null);
+  const overlayRef = useRef<HTMLDivElement>(null);
+
+  // Smart hide/show on scroll
+  useGSAP(() => {
+    let lastY = 0;
+    ScrollTrigger.create({
+      onUpdate: (self) => {
+        const currentY = self.scroll();
+        const delta = currentY - lastY;
+        if (delta > 6 && currentY > 80) {
+          gsap.to(headerRef.current, { yPercent: -100, duration: 0.3, ease: "power2.inOut" });
+        } else if (delta < -4) {
+          gsap.to(headerRef.current, { yPercent: 0, duration: 0.35, ease: "power2.out" });
+        }
+        lastY = currentY;
+      },
+    });
+  });
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 16);
     handleScroll();
-    window.addEventListener("scroll", handleScroll);
+    window.addEventListener("scroll", handleScroll, { passive: true });
     return () => window.removeEventListener("scroll", handleScroll);
   }, []);
 
@@ -38,9 +62,37 @@ export function SiteHeader() {
     return () => document.removeEventListener("mousedown", handleClickOutside);
   }, []);
 
+  const openDrawer = () => {
+    setIsOpen(true);
+    if (overlayRef.current && drawerRef.current) {
+      gsap.fromTo(overlayRef.current, { opacity: 0 }, { opacity: 1, duration: 0.28, ease: "power2.out" });
+      gsap.fromTo(
+        drawerRef.current,
+        { x: -40, opacity: 0 },
+        { x: 0, opacity: 1, duration: 0.32, ease: "power3.out" },
+      );
+    }
+  };
+
+  const closeDrawer = () => {
+    if (overlayRef.current && drawerRef.current) {
+      gsap.to(overlayRef.current, { opacity: 0, duration: 0.22, ease: "power2.in" });
+      gsap.to(drawerRef.current, {
+        x: -30,
+        opacity: 0,
+        duration: 0.22,
+        ease: "power2.in",
+        onComplete: () => setIsOpen(false),
+      });
+    } else {
+      setIsOpen(false);
+    }
+  };
+
   return (
     <>
       <header
+        ref={headerRef}
         className={`sticky top-0 z-50 border-b transition-all duration-300 ${
           isScrolled
             ? "border-[color:var(--border-soft)] bg-white/92 shadow-[0_10px_30px_rgba(90,61,50,0.07)] backdrop-blur-xl"
@@ -52,7 +104,7 @@ export function SiteHeader() {
             <button
               type="button"
               className="inline-flex h-11 w-11 items-center justify-center rounded-full border border-[color:var(--border-soft)] text-[color:var(--foreground)] lg:hidden"
-              onClick={() => setIsOpen(true)}
+              onClick={openDrawer}
               aria-label="Mở menu điều hướng"
             >
               <Menu className="h-5 w-5" />
@@ -82,11 +134,13 @@ export function SiteHeader() {
                     aria-label="Mở danh sách dịch vụ"
                   >
                     Dịch vụ
-                    <ChevronDown className={`h-4 w-4 transition-transform ${isServicesOpen ? "rotate-180" : ""}`} />
+                    <ChevronDown
+                      className={`h-4 w-4 transition-transform duration-300 ${isServicesOpen ? "rotate-180" : ""}`}
+                    />
                   </button>
                   <div
-                    className={`absolute left-1/2 top-full z-50 mt-4 w-[760px] -translate-x-1/2 rounded-[28px] border border-[color:var(--border-soft)] bg-white p-6 shadow-[0_24px_60px_rgba(95,68,58,0.09)] transition ${
-                      isServicesOpen ? "pointer-events-auto opacity-100" : "pointer-events-none opacity-0"
+                    className={`absolute left-1/2 top-full z-50 mt-4 w-[760px] -translate-x-1/2 rounded-[28px] border border-[color:var(--border-soft)] bg-white p-6 shadow-[0_24px_60px_rgba(95,68,58,0.09)] transition-all duration-200 ${
+                      isServicesOpen ? "pointer-events-auto opacity-100 translate-y-0" : "pointer-events-none opacity-0 -translate-y-2"
                     }`}
                   >
                     <div className="mb-4 flex items-center justify-between rounded-[22px] bg-[color:var(--surface-rose)]/48 px-4 py-4">
@@ -163,86 +217,90 @@ export function SiteHeader() {
         </div>
       </header>
 
-      <AnimatePresence>
-        {isOpen ? (
-          <motion.div
-            initial={{ opacity: 0 }}
-            animate={{ opacity: 1 }}
-            exit={{ opacity: 0 }}
-            className="fixed inset-0 z-[60] bg-[rgba(47,39,36,0.38)] lg:hidden"
+      {isOpen ? (
+        <div
+          ref={overlayRef}
+          className="fixed inset-0 z-[60] bg-[rgba(47,39,36,0.38)] lg:hidden"
+          onClick={closeDrawer}
+        >
+          <div
+            ref={drawerRef}
+            className="thin-scrollbar h-full w-[90%] max-w-sm overflow-y-auto bg-[color:var(--surface)] px-5 py-5 shadow-2xl"
+            onClick={(e) => e.stopPropagation()}
           >
-            <motion.div
-              initial={{ x: -30, opacity: 0 }}
-              animate={{ x: 0, opacity: 1 }}
-              exit={{ x: -30, opacity: 0 }}
-              transition={{ duration: 0.22, ease: "easeOut" }}
-              className="thin-scrollbar h-full w-[90%] max-w-sm overflow-y-auto bg-[color:var(--surface)] px-5 py-5 shadow-2xl"
-            >
-              <div className="mb-8 flex items-start justify-between">
-                <div>
-                  <Image
-                    src="/images/logo-uyen-clean.svg"
-                    alt="Logo Chòi của Uyn"
-                    width={420}
-                    height={220}
-                    className="h-auto w-[176px]"
-                  />
-                </div>
-                <button
-                  type="button"
-                  className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-[color:var(--border-soft)]"
-                  onClick={() => setIsOpen(false)}
-                  aria-label="Đóng menu điều hướng"
-                >
-                  <X className="h-4 w-4" />
-                </button>
-              </div>
-              <nav className="flex flex-col gap-2">
-                {navItems.map((item) => (
-                  <Link
-                    key={item.label}
-                    href={item.href}
-                    className="rounded-2xl border border-transparent px-4 py-3 text-base text-[color:var(--foreground)] hover:border-[color:var(--border-soft)] hover:bg-[color:var(--surface-rose)]/60"
-                    onClick={() => setIsOpen(false)}
-                  >
-                    {item.label}
-                  </Link>
-                ))}
-              </nav>
-
-              <div className="mt-8 space-y-4">
-                {servicesGroupedForMenu.map((group) => (
-                  <div key={group.slug} className="rounded-[24px] border border-[color:var(--border-soft)] bg-[color:var(--surface-rose)]/55 p-4">
-                    <Link href={`/dich-vu/${group.slug}`} onClick={() => setIsOpen(false)} className="font-semibold text-[color:var(--foreground)]">
-                      {group.menuTitle}
-                    </Link>
-                    <div className="mt-3 grid gap-2 text-sm text-[color:var(--muted)]">
-                      {group.services.map((service) => (
-                        <Link key={service.slug} href={`/dich-vu/${service.slug}`} onClick={() => setIsOpen(false)}>
-                          {service.title}
-                        </Link>
-                      ))}
-                    </div>
-                  </div>
-                ))}
-              </div>
-
-              <div className="mt-8 rounded-[28px] border border-[color:var(--border-soft)] bg-[color:var(--surface-rose)]/70 p-5">
-                <p className="text-sm text-[color:var(--foreground)]">
-                  Gửi hình tình trạng hiện tại để được tư vấn trước khi đặt lịch.
-                </p>
+            <div className="mb-8 flex items-start justify-between">
+              <Image
+                src="/images/logo-uyen-clean.svg"
+                alt="Logo Chòi của Uyn"
+                width={420}
+                height={220}
+                className="h-auto w-[176px]"
+              />
+              <button
+                type="button"
+                className="inline-flex h-10 w-10 items-center justify-center rounded-full border border-[color:var(--border-soft)]"
+                onClick={closeDrawer}
+                aria-label="Đóng menu điều hướng"
+              >
+                <X className="h-4 w-4" />
+              </button>
+            </div>
+            <nav className="flex flex-col gap-2">
+              {navItems.map((item) => (
                 <Link
-                  href="/lien-he"
-                  className="mt-4 inline-flex h-11 w-full items-center justify-center rounded-full bg-[color:var(--cta)] px-5 text-sm font-semibold text-white"
-                  onClick={() => setIsOpen(false)}
+                  key={item.label}
+                  href={item.href}
+                  className="rounded-2xl border border-transparent px-4 py-3 text-base text-[color:var(--foreground)] hover:border-[color:var(--border-soft)] hover:bg-[color:var(--surface-rose)]/60"
+                  onClick={closeDrawer}
                 >
-                  Nhắn Zalo tư vấn
+                  {item.label}
                 </Link>
-              </div>
-            </motion.div>
-          </motion.div>
-        ) : null}
-      </AnimatePresence>
+              ))}
+            </nav>
+
+            <div className="mt-8 space-y-4">
+              {servicesGroupedForMenu.map((group) => (
+                <div
+                  key={group.slug}
+                  className="rounded-[24px] border border-[color:var(--border-soft)] bg-[color:var(--surface-rose)]/55 p-4"
+                >
+                  <Link
+                    href={`/dich-vu/${group.slug}`}
+                    onClick={closeDrawer}
+                    className="font-semibold text-[color:var(--foreground)]"
+                  >
+                    {group.menuTitle}
+                  </Link>
+                  <div className="mt-3 grid gap-2 text-sm text-[color:var(--muted)]">
+                    {group.services.map((service) => (
+                      <Link
+                        key={service.slug}
+                        href={`/dich-vu/${service.slug}`}
+                        onClick={closeDrawer}
+                      >
+                        {service.title}
+                      </Link>
+                    ))}
+                  </div>
+                </div>
+              ))}
+            </div>
+
+            <div className="mt-8 rounded-[28px] border border-[color:var(--border-soft)] bg-[color:var(--surface-rose)]/70 p-5">
+              <p className="text-sm text-[color:var(--foreground)]">
+                Gửi hình tình trạng hiện tại để được tư vấn trước khi đặt lịch.
+              </p>
+              <Link
+                href="/lien-he"
+                className="mt-4 inline-flex h-11 w-full items-center justify-center rounded-full bg-[color:var(--cta)] px-5 text-sm font-semibold text-white"
+                onClick={closeDrawer}
+              >
+                Nhắn Zalo tư vấn
+              </Link>
+            </div>
+          </div>
+        </div>
+      ) : null}
     </>
   );
 }
