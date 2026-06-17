@@ -1,9 +1,7 @@
 "use client";
 
-import { useGSAP } from "@gsap/react";
 import Autoplay from "embla-carousel-autoplay";
 import useEmblaCarousel from "embla-carousel-react";
-import gsap from "gsap";
 import { ArrowLeft, ArrowRight } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
@@ -12,16 +10,6 @@ import { heroSlides, trustHighlights } from "@/data/home";
 
 export function HeroPromoSlider() {
   const heroRef = useRef<HTMLElement>(null);
-
-  useGSAP(
-    () => {
-      const tl = gsap.timeline({ delay: 0.1 });
-      tl.from(".hero-badge", { opacity: 0, y: -16, duration: 0.5, ease: "power2.out" })
-        .from(".hero-trust-card", { opacity: 0, y: 24, duration: 0.55, ease: "power2.out", stagger: 0.08 }, "-=0.2")
-        .from(".hero-sub", { opacity: 0, y: 12, duration: 0.5, ease: "power2.out" }, "-=0.3");
-    },
-    { scope: heroRef },
-  );
 
   const autoplay = useMemo(
     () =>
@@ -54,8 +42,8 @@ export function HeroPromoSlider() {
   const activeSlide = heroSlides[selectedIndex] ?? heroSlides[0];
 
   return (
-    <section ref={heroRef} className="section-frame px-4 pt-6 pb-20 lg:px-6 lg:pt-10 lg:pb-24">
-      <div className="overflow-hidden rounded-[32px] border border-[color:var(--border-soft)] bg-white p-2 shadow-[0_40px_120px_rgba(102,71,59,0.1)] sm:rounded-[36px]">
+    <section ref={heroRef} className="section-frame px-4 pt-6 pb-4 lg:px-6 lg:pt-8 lg:pb-4">
+      <div className="overflow-hidden rounded-[28px] border border-[color:var(--border-soft)] bg-white shadow-[0_8px_40px_rgba(102,71,59,0.08)] sm:rounded-[32px]">
         <div className="relative overflow-hidden rounded-[28px] bg-[color:var(--surface-soft)]">
           <div className="pointer-events-none absolute inset-0 bg-[radial-gradient(circle_at_top_left,rgba(232,184,172,0.26),transparent_30%),radial-gradient(circle_at_bottom_right,rgba(215,185,138,0.18),transparent_28%)]" />
           <div className="overflow-hidden" ref={emblaRef}>
@@ -175,21 +163,21 @@ export function HeroPromoSlider() {
         </div>
       </div>
 
-      <div className="-mt-4 grid gap-3 px-1 sm:-mt-10 sm:gap-4 sm:px-5 sm:grid-cols-3">
+      <div className="mt-3 grid gap-2.5 px-1 sm:grid-cols-3">
         {trustHighlights.map((item) => (
           <div
             key={item}
-            className="hero-trust-card soft-card rounded-[22px] px-4 py-4 text-sm font-medium text-[color:var(--foreground)] sm:rounded-[24px] sm:px-5 sm:py-5"
+            className="hero-trust-card flex items-center gap-2.5 rounded-[16px] border border-[color:var(--border-soft)] bg-white px-4 py-3.5 text-sm font-semibold text-[color:var(--foreground)]"
           >
+            <span className="h-1.5 w-1.5 rounded-full bg-[color:var(--cta)] shrink-0" />
             {item}
           </div>
         ))}
       </div>
 
-      <div className="hero-sub mt-6 flex flex-col gap-2 px-1 text-sm text-[color:var(--muted)] sm:mt-8 sm:flex-row sm:items-center sm:justify-between sm:px-2">
-        <p>{activeSlide.subtitle}</p>
-        <p className="hidden tracking-[0.18em] uppercase text-[color:var(--earth)] sm:block">
-          Vũng Tàu • Tư vấn rõ • Làm đẹp vừa đủ
+      <div className="hero-sub mt-3 px-1 text-right">
+        <p className="text-xs tracking-[0.14em] uppercase text-[color:var(--earth)] font-medium">
+          Vũng Tàu · Tư vấn rõ · Làm đẹp vừa đủ
         </p>
       </div>
     </section>

@@ -1,15 +1,10 @@
 "use client";
 
-import { useGSAP } from "@gsap/react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import { ChevronDown, Menu, PhoneCall, Search, X } from "lucide-react";
 import Image from "next/image";
 import Link from "next/link";
 import { useEffect, useRef, useState } from "react";
 import { navItems, servicesGroupedForMenu } from "@/lib/site-data";
-
-gsap.registerPlugin(ScrollTrigger);
 
 export function SiteHeader() {
   const [isScrolled, setIsScrolled] = useState(false);
@@ -20,22 +15,25 @@ export function SiteHeader() {
   const drawerRef = useRef<HTMLDivElement>(null);
   const overlayRef = useRef<HTMLDivElement>(null);
 
-  // Smart hide/show on scroll
-  useGSAP(() => {
+  // Smart hide/show on scroll — pure CSS transition
+  useEffect(() => {
+    const header = headerRef.current;
+    if (!header) return;
+    header.style.transition = "transform 0.3s ease";
     let lastY = 0;
-    ScrollTrigger.create({
-      onUpdate: (self) => {
-        const currentY = self.scroll();
-        const delta = currentY - lastY;
-        if (delta > 6 && currentY > 80) {
-          gsap.to(headerRef.current, { yPercent: -100, duration: 0.3, ease: "power2.inOut" });
-        } else if (delta < -4) {
-          gsap.to(headerRef.current, { yPercent: 0, duration: 0.35, ease: "power2.out" });
-        }
-        lastY = currentY;
-      },
-    });
-  });
+    const onScroll = () => {
+      const y = window.scrollY;
+      const delta = y - lastY;
+      if (delta > 6 && y > 80) {
+        header.style.transform = "translateY(-100%)";
+      } else if (delta < -4) {
+        header.style.transform = "translateY(0)";
+      }
+      lastY = y;
+    };
+    window.addEventListener("scroll", onScroll, { passive: true });
+    return () => window.removeEventListener("scroll", onScroll);
+  }, []);
 
   useEffect(() => {
     const handleScroll = () => setIsScrolled(window.scrollY > 16);
@@ -64,26 +62,29 @@ export function SiteHeader() {
 
   const openDrawer = () => {
     setIsOpen(true);
-    if (overlayRef.current && drawerRef.current) {
-      gsap.fromTo(overlayRef.current, { opacity: 0 }, { opacity: 1, duration: 0.28, ease: "power2.out" });
-      gsap.fromTo(
-        drawerRef.current,
-        { x: -40, opacity: 0 },
-        { x: 0, opacity: 1, duration: 0.32, ease: "power3.out" },
-      );
-    }
+    requestAnimationFrame(() => {
+      if (overlayRef.current) {
+        overlayRef.current.style.transition = "opacity 0.28s ease";
+        overlayRef.current.style.opacity = "1";
+      }
+      if (drawerRef.current) {
+        drawerRef.current.style.transition = "transform 0.32s cubic-bezier(0.22,1,0.36,1), opacity 0.32s ease";
+        drawerRef.current.style.transform = "translateX(0)";
+        drawerRef.current.style.opacity = "1";
+      }
+    });
   };
 
   const closeDrawer = () => {
-    if (overlayRef.current && drawerRef.current) {
-      gsap.to(overlayRef.current, { opacity: 0, duration: 0.22, ease: "power2.in" });
-      gsap.to(drawerRef.current, {
-        x: -30,
-        opacity: 0,
-        duration: 0.22,
-        ease: "power2.in",
-        onComplete: () => setIsOpen(false),
-      });
+    if (overlayRef.current) {
+      overlayRef.current.style.transition = "opacity 0.22s ease";
+      overlayRef.current.style.opacity = "0";
+    }
+    if (drawerRef.current) {
+      drawerRef.current.style.transition = "transform 0.22s ease, opacity 0.22s ease";
+      drawerRef.current.style.transform = "translateX(-30px)";
+      drawerRef.current.style.opacity = "0";
+      setTimeout(() => setIsOpen(false), 230);
     } else {
       setIsOpen(false);
     }
@@ -221,11 +222,13 @@ export function SiteHeader() {
         <div
           ref={overlayRef}
           className="fixed inset-0 z-[60] bg-[rgba(47,39,36,0.38)] lg:hidden"
+          style={{ opacity: 0 }}
           onClick={closeDrawer}
         >
           <div
             ref={drawerRef}
             className="thin-scrollbar h-full w-[90%] max-w-sm overflow-y-auto bg-[color:var(--surface)] px-5 py-5 shadow-2xl"
+            style={{ transform: "translateX(-40px)", opacity: 0 }}
             onClick={(e) => e.stopPropagation()}
           >
             <div className="mb-8 flex items-start justify-between">

@@ -1,12 +1,7 @@
 "use client";
 
-import { useGSAP } from "@gsap/react";
-import gsap from "gsap";
-import { ScrollTrigger } from "gsap/ScrollTrigger";
 import type { ReactNode } from "react";
-import { useRef } from "react";
-
-gsap.registerPlugin(ScrollTrigger);
+import { useEffect, useRef } from "react";
 
 type RevealProps = {
   children: ReactNode;
@@ -18,34 +13,31 @@ type RevealProps = {
 export function Reveal({ children, delay = 0, className, from = "bottom" }: RevealProps) {
   const ref = useRef<HTMLDivElement>(null);
 
-  useGSAP(
-    () => {
-      const el = ref.current;
-      if (!el) return;
+  useEffect(() => {
+    const el = ref.current;
+    if (!el) return;
 
-      const fromVars: gsap.TweenVars =
-        from === "bottom"
-          ? { opacity: 0, y: 40 }
-          : from === "left"
-            ? { opacity: 0, x: -40 }
-            : from === "right"
-              ? { opacity: 0, x: 40 }
-              : { opacity: 0 };
+    // Set initial state
+    el.style.opacity = "0";
+    el.style.transition = `opacity 0.55s ease ${delay}s, transform 0.55s ease ${delay}s`;
+    if (from === "bottom") el.style.transform = "translateY(24px)";
+    else if (from === "left") el.style.transform = "translateX(-24px)";
+    else if (from === "right") el.style.transform = "translateX(24px)";
 
-      gsap.from(el, {
-        ...fromVars,
-        duration: 0.8,
-        delay,
-        ease: "power3.out",
-        scrollTrigger: {
-          trigger: el,
-          start: "top 88%",
-          toggleActions: "play none none none",
-        },
-      });
-    },
-    { scope: ref },
-  );
+    const io = new IntersectionObserver(
+      ([entry]) => {
+        if (entry.isIntersecting) {
+          el.style.opacity = "1";
+          el.style.transform = "none";
+          io.disconnect();
+        }
+      },
+      { threshold: 0.08, rootMargin: "0px 0px -40px 0px" },
+    );
+
+    io.observe(el);
+    return () => io.disconnect();
+  }, [delay, from]);
 
   return (
     <div ref={ref} className={className}>

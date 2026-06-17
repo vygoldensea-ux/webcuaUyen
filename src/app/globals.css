@@ -1,17 +1,33 @@
 @import "tailwindcss";
 
 :root {
-  --background: #fff8f5;
-  --foreground: #2f2724;
+  /* Core palette */
+  --background: #fdf9f7;
+  --foreground: #1a100c;        /* stronger near-black for headings */
+  --body-text: #3d2e28;         /* readable body, warmer than neutral */
   --surface: #ffffff;
-  --surface-soft: #f8eee8;
-  --surface-rose: #f7ebe5;
+  --surface-soft: #f5e9e2;
+  --surface-rose: #f2e3da;
+  --surface-alt: #f9f3ef;       /* alternate section bg */
+  --surface-dark: #2a1e1a;      /* dark accent section */
+
+  /* Accent & brand */
   --rose: #e8b8ac;
-  --earth: #9b6b5a;
-  --muted: #7a6660;
-  --border-soft: #eadbd4;
+  --earth: #8c5c4a;             /* slightly richer earth */
+  --earth-light: #b8876e;
+  --muted: #6b5550;             /* body text secondary */
+  --muted-light: #9e8880;       /* placeholder / captions */
+
+  /* Borders */
+  --border-soft: #e4d2c8;
+  --border-medium: #cdb8ae;
+
+  /* CTA */
   --cta: #a87363;
   --cta-hover: #8f5f51;
+  --cta-dark: #6e3d2d;
+
+  /* Typography scale anchors */
   --champagne: #d7b98a;
 }
 
@@ -32,8 +48,10 @@ html {
 
 body {
   background: var(--background);
-  color: var(--foreground);
+  color: var(--body-text);
   font-family: var(--font-manrope), ui-sans-serif, system-ui, sans-serif;
+  -webkit-font-smoothing: antialiased;
+  line-height: 1.6;
 }
 
 a,
@@ -51,22 +69,68 @@ button {
   background: rgba(232, 184, 172, 0.35);
 }
 
+/* ── Shell & section backgrounds ── */
 .editorial-shell {
-  background:
-    radial-gradient(circle at top left, rgba(232, 184, 172, 0.17), transparent 30%),
-    radial-gradient(circle at top right, rgba(215, 185, 138, 0.12), transparent 24%),
-    linear-gradient(180deg, #fffdfc 0%, #fff8f5 45%, #fffaf7 100%);
+  background: var(--background);
 }
 
+/* Alternate section backgrounds for visual rhythm */
+.section-white   { background: #ffffff; }
+.section-warm    { background: var(--surface-alt); }
+.section-rose    { background: var(--surface-rose); }
+.section-dark    { background: var(--surface-dark); color: #f5ede8; }
+
+/* ── Typography ── */
+.editorial-title {
+  font-family: var(--font-playfair), Georgia, serif;
+  letter-spacing: -0.01em;
+  color: var(--foreground);
+  line-height: 1.08;
+}
+
+/* Section headings should always be near-black */
+h1, h2 {
+  color: var(--foreground);
+}
+
+h3, h4 {
+  color: var(--foreground);
+}
+
+.eyebrow {
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  font-weight: 600;
+  color: var(--earth);
+  font-size: 11px;
+}
+
+/* Eyebrow with dot accent */
+.eyebrow-dot::before {
+  content: '·';
+  margin-right: 6px;
+  color: var(--rose);
+}
+
+/* ── Cards ── */
 .soft-card {
   border: 1px solid var(--border-soft);
-  background: rgba(255, 255, 255, 0.86);
-  box-shadow: 0 18px 60px rgba(97, 69, 58, 0.06);
-  backdrop-filter: blur(18px);
+  background: rgba(255, 255, 255, 0.9);
+  box-shadow: 0 4px 24px rgba(97, 69, 58, 0.05), 0 1px 3px rgba(97, 69, 58, 0.06);
+  backdrop-filter: blur(12px);
 }
 
+.card-hover {
+  transition: box-shadow 250ms ease, transform 250ms ease;
+}
+.card-hover:hover {
+  box-shadow: 0 12px 40px rgba(97, 69, 58, 0.1);
+  transform: translateY(-2px);
+}
+
+/* ── Layout ── */
 .section-frame {
-  width: min(1240px, calc(100% - 32px));
+  width: min(1200px, calc(100% - 32px));
   margin-inline: auto;
 }
 
@@ -74,23 +138,44 @@ button {
   text-wrap: balance;
 }
 
-.eyebrow {
-  letter-spacing: 0.18em;
-  text-transform: uppercase;
+/* ── Scroll reveal — CSS-based, no jank ── */
+.reveal-up {
+  opacity: 0;
+  transform: translateY(28px);
+  transition: opacity 0.55s ease, transform 0.55s ease;
+}
+.reveal-up.is-visible {
+  opacity: 1;
+  transform: translateY(0);
 }
 
-.editorial-title {
-  font-family: var(--font-playfair), Georgia, serif;
-  letter-spacing: 0.02em;
-}
-
+/* ── Scrollbar ── */
 .thin-scrollbar::-webkit-scrollbar {
-  width: 10px;
+  width: 8px;
 }
-
 .thin-scrollbar::-webkit-scrollbar-thumb {
-  background: rgba(155, 107, 90, 0.18);
+  background: rgba(155, 107, 90, 0.2);
   border-radius: 999px;
   border: 2px solid transparent;
   background-clip: padding-box;
+}
+
+/* ── Blog editorial ── */
+.blog-divider {
+  border: none;
+  border-top: 1px solid var(--border-soft);
+}
+
+/* ── Utility ── */
+.line-clamp-2 {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.line-clamp-3 {
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
 }
