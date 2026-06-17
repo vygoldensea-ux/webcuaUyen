@@ -97,14 +97,6 @@ button {
   text-transform: uppercase;
 }
 
-/* Section headings should always be near-black */
-h1, h2 {
-  color: var(--foreground);
-}
-
-h3, h4 {
-  color: var(--foreground);
-}
 
 .eyebrow {
   letter-spacing: 0.16em;

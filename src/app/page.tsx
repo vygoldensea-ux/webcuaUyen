@@ -8,7 +8,6 @@ import { ProcessTimeline } from "@/components/home/process-timeline";
 import { PromotionStrip } from "@/components/home/promotion-strip";
 import { QuickBookBand } from "@/components/home/quick-book-band";
 import { ServiceGrid } from "@/components/home/service-grid";
-import { TrustStats } from "@/components/home/trust-stats";
 import { JsonLd } from "@/components/site/json-ld";
 import { faqs } from "@/data/home";
 import { buildFaqSchema } from "@/lib/seo";
@@ -62,7 +61,6 @@ export default function Home() {
       <ServiceGrid />
       <PromotionStrip />
       <BrandStory />
-      <TrustStats />
       <ProcessTimeline />
       <BeforeAfter />
       <BlogPreview />

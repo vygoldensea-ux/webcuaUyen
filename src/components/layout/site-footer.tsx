@@ -14,7 +14,7 @@ export function SiteFooter() {
               alt="Logo Chòi của Uyn"
               width={420}
               height={220}
-              className="h-auto w-[220px]"
+              className="h-auto w-[170px] sm:w-[200px]"
             />
           </Link>
           <p className="mt-6 max-w-sm text-[15px] leading-7 text-[color:var(--muted)]">

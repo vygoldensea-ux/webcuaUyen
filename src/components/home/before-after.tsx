@@ -4,25 +4,21 @@ import { Reveal } from "./reveal";
 const beforeAfterItems = [
   {
     title: "Cân chỉnh môi – giữ form tự nhiên",
-    description: "Ưu tiên sự mềm mại thay vì làm môi đầy quá tay.",
     image: "/images/before-after-1.jpg",
     alt: "Kết quả cân chỉnh môi tại Vũng Tàu",
   },
   {
     title: "Phun môi xử lý nền nhợt",
-    description: "Làm tươi sắc môi nhưng vẫn giữ cảm giác mềm và thật.",
     image: "/images/before-after-2.jpg",
     alt: "Kết quả phun môi tại Vũng Tàu",
   },
   {
     title: "Dáng mày mềm, không quá sắc",
-    description: "Thiết kế dáng mày theo tỉ lệ gương mặt và thần thái riêng.",
     image: "/images/before-after-3.jpg",
     alt: "Kết quả phun mày tại Vũng Tàu",
   },
   {
     title: "Da sau chăm sóc phục hồi",
-    description: "Ưu tiên làm sạch, phục hồi độ mịn và cảm giác thoáng da.",
     image: "/images/before-after-4.jpg",
     alt: "Kết quả chăm sóc da tại Vũng Tàu",
   },
@@ -42,32 +38,35 @@ export function BeforeAfter() {
           </p>
         </Reveal>
 
-        <div className="grid gap-5 sm:grid-cols-2 xl:grid-cols-4">
+        <div className="grid grid-cols-2 gap-4 lg:grid-cols-4 items-stretch">
           {beforeAfterItems.map((item, i) => (
-            <Reveal key={item.title} delay={i * 0.08}>
-              <article className="overflow-hidden rounded-[20px] border border-[color:var(--border-soft)] bg-white shadow-sm">
-                <div className="relative aspect-[3/4] overflow-hidden bg-[color:var(--surface-soft)]">
+            <Reveal key={item.title} delay={i * 0.08} className="flex">
+              <article className="flex w-full flex-col overflow-hidden rounded-[20px] border border-[color:var(--border-soft)] bg-white shadow-sm">
+                {/* Fixed aspect ratio — all images same frame */}
+                <div className="relative aspect-[3/4] w-full shrink-0 overflow-hidden bg-[color:var(--surface-soft)]">
                   <Image
                     src={item.image}
                     alt={item.alt}
                     fill
-                    sizes="(max-width: 640px) 100vw, (max-width: 1280px) 50vw, 25vw"
+                    sizes="(max-width: 640px) 50vw, (max-width: 1280px) 50vw, 25vw"
                     className="object-cover"
                   />
                   <div className="absolute top-3 left-3 inline-flex rounded-full border border-white/60 bg-white/85 px-2.5 py-1 text-[10px] font-semibold uppercase tracking-wider text-[color:var(--earth)]">
                     Thực tế
                   </div>
                 </div>
-                <div className="p-4">
-                  <h3 className="text-[15px] font-bold text-[color:var(--foreground)]">{item.title}</h3>
-                  <p className="mt-1.5 text-sm leading-6 text-[color:var(--muted)]">{item.description}</p>
+                {/* Fixed height text area so all cards match */}
+                <div className="flex flex-1 items-center px-4 py-4">
+                  <h3 className="text-[13px] font-bold leading-snug text-[color:var(--foreground)]">
+                    {item.title}
+                  </h3>
                 </div>
               </article>
             </Reveal>
           ))}
         </div>
 
-        <p className="mt-6 text-xs text-[color:var(--muted-light)]">
+        <p className="mt-5 text-xs text-[color:var(--muted-light)]">
           Kết quả có thể khác nhau tùy cơ địa, tình trạng nền và cách chăm sóc sau dịch vụ.
         </p>
       </div>
