@@ -1,5 +1,5 @@
 import type { Metadata } from "next";
-import { Manrope, Playfair_Display } from "next/font/google";
+import { DM_Sans, Playfair_Display } from "next/font/google";
 import { PageTransition } from "@/components/layout/page-transition";
 import { SiteAnnouncementBar } from "@/components/layout/site-announcement-bar";
 import { SiteFooter } from "@/components/layout/site-footer";
@@ -7,9 +7,10 @@ import { SiteHeader } from "@/components/layout/site-header";
 import { JsonLd } from "@/components/site/json-ld";
 import "./globals.css";
 
-const manrope = Manrope({
-  variable: "--font-manrope",
+const dmSans = DM_Sans({
+  variable: "--font-sans",
   subsets: ["latin"],
+  weight: ["300", "400", "500", "600", "700"],
 });
 
 const playfairDisplay = Playfair_Display({
@@ -54,7 +55,7 @@ export default function RootLayout({
   return (
     <html
       lang="vi"
-      className={`${manrope.variable} ${playfairDisplay.variable} h-full`}
+      className={`${dmSans.variable} ${playfairDisplay.variable} h-full`}
     >
       <body className="editorial-shell min-h-full flex flex-col">
         <JsonLd
