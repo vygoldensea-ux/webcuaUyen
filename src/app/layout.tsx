@@ -20,9 +20,30 @@ const playfairDisplay = Playfair_Display({
 
 export const metadata: Metadata = {
   metadataBase: new URL("https://choicuauyn.vn"),
-  title: "Chòi của Uyn – Mini Spa & Aesthetics tại Vũng Tàu",
+  title: {
+    default: "Chòi của Uyn – Phun môi, phun mày, filler & chăm sóc da tại Vũng Tàu",
+    template: "%s | Chòi của Uyn – Mini Spa Vũng Tàu",
+  },
   description:
-    "Chòi của Uyn cung cấp phun xăm chân mày, phun môi, filler, botox, meso và chăm sóc da tại Vũng Tàu. Tư vấn kỹ, làm đẹp tự nhiên, rõ quy trình.",
+    "Mini spa tại Vũng Tàu: phun xăm chân mày, phun môi, filler, botox, meso căng bóng và chăm sóc da mụn. Tư vấn kỹ trước khi làm, không ép dịch vụ, theo dõi sau làm.",
+  keywords: [
+    "phun môi Vũng Tàu",
+    "phun mày Vũng Tàu",
+    "filler Vũng Tàu",
+    "botox Vũng Tàu",
+    "meso Vũng Tàu",
+    "chăm sóc da Vũng Tàu",
+    "spa Vũng Tàu",
+    "làm đẹp Vũng Tàu",
+    "Chòi của Uyn",
+  ],
+  openGraph: {
+    type: "website",
+    locale: "vi_VN",
+    siteName: "Chòi của Uyn – Mini Spa & Aesthetics",
+    images: [{ url: "/images/brand-story.jpg", width: 1200, height: 630 }],
+  },
+  alternates: { canonical: "/" },
 };
 
 export default function RootLayout({

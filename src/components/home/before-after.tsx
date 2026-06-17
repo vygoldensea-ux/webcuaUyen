@@ -5,7 +5,32 @@ import gsap from "gsap";
 import { ScrollTrigger } from "gsap/ScrollTrigger";
 import Image from "next/image";
 import { useRef } from "react";
-import { beforeAfterItems } from "@/data/home";
+const beforeAfterItems = [
+  {
+    title: "Cân chỉnh môi – giữ form tự nhiên",
+    description: "Ưu tiên sự mềm mại thay vì làm môi đầy quá tay.",
+    image: "/images/before-after-1.jpg",
+    alt: "Kết quả cân chỉnh môi tại Vũng Tàu – tự nhiên và mềm mại",
+  },
+  {
+    title: "Phun môi xử lý nền nhợt",
+    description: "Làm tươi sắc môi nhưng vẫn giữ cảm giác mềm và thật.",
+    image: "/images/before-after-2.jpg",
+    alt: "Kết quả phun môi tại Vũng Tàu – sắc môi tươi và tự nhiên",
+  },
+  {
+    title: "Dáng mày mềm, không quá sắc",
+    description: "Thiết kế dáng mày theo tỉ lệ gương mặt và thần thái riêng.",
+    image: "/images/before-after-3.jpg",
+    alt: "Kết quả phun mày tại Vũng Tàu – dáng mày mềm và hài hòa",
+  },
+  {
+    title: "Da sau chăm sóc phục hồi",
+    description: "Ưu tiên làm sạch, phục hồi độ mịn và cảm giác thoáng da.",
+    image: "/images/before-after-4.jpg",
+    alt: "Kết quả chăm sóc da tại Vũng Tàu – da sáng và mịn hơn",
+  },
+] as const;
 import { Reveal } from "./reveal";
 
 gsap.registerPlugin(ScrollTrigger);
@@ -36,12 +61,13 @@ export function BeforeAfter() {
   return (
     <section id="before-after" className="section-frame px-4 py-20 lg:px-6 lg:py-28">
       <Reveal className="mb-10 max-w-3xl">
-        <p className="eyebrow text-[11px] text-[color:var(--earth)]">Khách hàng thực tế</p>
+        <p className="eyebrow text-[11px] text-[color:var(--earth)]">Khách hàng thực tế tại Vũng Tàu</p>
         <h2 className="editorial-title mt-4 text-4xl text-[color:var(--foreground)] sm:text-5xl">
-          Kết quả thực tế
+          Kết quả thực tế từ khách của Uyn
         </h2>
         <p className="mt-5 text-lg leading-8 text-[color:var(--muted)]">
-          Mỗi ca làm đẹp nên được nhìn bằng sự tự nhiên, cân đối và phù hợp với từng người.
+          Mỗi ca làm đẹp được chụp lại để khách có thể so sánh trước và sau — đánh giá theo
+          sự tự nhiên, cân đối và phù hợp với từng người.
         </p>
       </Reveal>
 

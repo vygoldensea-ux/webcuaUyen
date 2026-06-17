@@ -72,8 +72,8 @@ export function BrandStory() {
           className="relative min-h-[380px] overflow-hidden rounded-[32px] border border-[color:var(--border-soft)] bg-[color:var(--surface)]"
         >
           <Image
-            src="/images/placeholder-clinic-soft.svg"
-            alt="Không gian mini spa và hình ảnh khách nữ với tổng thể mềm mại, tinh tế"
+            src="/images/brand-story.jpg"
+            alt="Không gian mini spa Chòi của Uyn tại Vũng Tàu – sạch, riêng tư và tinh tế"
             fill
             sizes="(max-width: 1024px) 100vw, 44vw"
             className="object-cover"
